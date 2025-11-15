@@ -1,25 +1,25 @@
 const buttons = document.querySelectorAll(".btn");
-const stopBtn = document.querySelector(".stop");
-
-buttons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const soundName = btn.textContent;
-    playSound(soundName);
-  });
-});
-
-function playSound(name) {
-  stopAllSounds();
-  const audio = new Audio(`sounds/${name}.mp3`);
-  audio.play();
-  window.currentSound = audio; // store reference
-}
-
-stopBtn.addEventListener("click", stopAllSounds);
+const stopButton = document.querySelector(".stop");
 
 function stopAllSounds() {
-  if (window.currentSound) {
-    window.currentSound.pause();
-    window.currentSound.currentTime = 0;
-  }
+    document.querySelectorAll("audio").forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
 }
+
+buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const soundId = btn.getAttribute("data-sound");
+
+        stopAllSounds(); // stop any playing sounds
+
+        const audio = document.getElementById(soundId);
+        audio.currentTime = 0;
+        audio.play();
+    });
+});
+
+stopButton.addEventListener("click", () => {
+    stopAllSounds();
+});
